@@ -1,0 +1,54 @@
+import React, { useState, useEffect } from 'react';
+import { saveSearch, toggleFavorite, getFavorites } from './utils/storage';
+import { fetchWord, fetchSynonyms } from './api/dictionary';
+import SearchBar from './components/SearchBar';
+import WordCard from './components/WordCard';
+import HistoryPanel from './components/HistoryPanel';
+import './App.css';
+
+function App() {
+  const [wordData, setWordData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState(getFavorites());
+  const [synonyms, setSynonyms] = useState([]);
+
+  const handleSearch = async (word) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWord(word);
+      const syns = await fetchSynonyms(word);
+      setWordData(data[0]);
+      setSynonyms(syns);
+      saveSearch(word);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFavorite = (word) => {
+    setFavorites(toggleFavorite(word));
+  };
+
+  return (
+    <div className="app">
+      <SearchBar onSearch={handleSearch} />
+      {loading && <div className="loader">Loading...</div>}
+      {error && <ErrorFallback word={error} onRetry={handleSearch} />}
+      {wordData && (
+        <WordCard 
+          data={wordData} 
+          isFavorite={favorites.includes(wordData.word)} 
+          onFavorite={handleFavorite}
+          synonyms={synonyms}
+        />
+      )}
+      <HistoryPanel />
+    </div>
+  );
+}
+
+export default App;
