@@ -1,0 +1,18 @@
+export const saveSearch = (word) => {
+  const history = JSON.parse(localStorage.getItem('searchHistory') || [];
+  if (!history.includes(word)) {
+    localStorage.setItem('searchHistory', JSON.stringify([word, ...history].slice(0, 10)));
+  }
+};
+
+export const toggleFavorite = (word) => {
+  const favorites = JSON.parse(localStorage.getItem('favorites') || []);
+  const updated = favorites.includes(word)
+    ? favorites.filter(w => w !== word)
+    : [...favorites, word];
+  localStorage.setItem('favorites', JSON.stringify(updated));
+  return updated;
+};
+
+export const getFavorites = () => 
+  JSON.parse(localStorage.getItem('favorites') || []);
