@@ -1,0 +1,22 @@
+.
+├── public/
+│   ├── index.html
+│   ├── manifest.json
+│   └── service-worker.js
+├── src/
+│   ├── components/
+│   │   ├── AudioPlayer.js
+│   │   ├── ErrorFallback.js
+│   │   ├── SearchBar.js
+│   │   ├── WordCard.js
+│   │   └── HistoryPanel.js
+│   ├── api/
+│   │   └── dictionary.js
+│   ├── utils/
+│   │   └── storage.js
+│   ├── App.js
+│   ├── App.css
+│   └── index.js
+├── package.json
+├── README.md
+└── .gitignore
